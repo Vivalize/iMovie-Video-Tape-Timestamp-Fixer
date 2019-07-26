@@ -21,10 +21,14 @@ def getYear(input):
 		return yearInput
 		
 def fixDate(input, output, date):
+	tempName = 'output.mov'
+	os.system('ffmpeg -y -i '+input.replace('//','/').replace(' ','\ ')+' -c copy -map 0 -metadata creation_time="'+str(date)+'" '+tempName)
 	fileDir = '/'.join(output.split('/')[:-1])
+	print(fileDir)
 	if not os.path.exists(fileDir):
 		os.makedirs(fileDir)
-	os.system('ffmpeg -i '+input.replace('//','/').replace(' ','\ ')+' -c copy -map 0 -metadata creation_time="'+str(date)+'" '+output.replace('//','/').replace(' ','\ ')+'')
+	os.rename(tempName, output)
+	
 
 def fixLibrary():
 	print('Fixing dates...')
