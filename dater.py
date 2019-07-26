@@ -3,6 +3,7 @@ import glob
 import os
 import sys
 import re
+import shutil
 from threading import Timer
 
 if len(sys.argv) < 4:
@@ -27,7 +28,7 @@ def fixDate(input, output, date):
 	print(fileDir)
 	if not os.path.exists(fileDir):
 		os.makedirs(fileDir)
-	os.rename(tempName, output)
+	shutil.move(tempName, output)
 	
 
 def fixLibrary():
