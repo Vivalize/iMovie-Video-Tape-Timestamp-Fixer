@@ -75,4 +75,5 @@ def fixLibrary():
 					
 			fileCounter += 1
 	
-fixLibrary()
+if __name__ == "__main__":
+	fixLibrary()
