@@ -65,7 +65,7 @@ def fixLibrary():
 				# Extrapolate date from other dates in folder
 				else:
 					latestDate = None
-					for i in range(fileDates):
+					for i in range(len(fileDates)):
 						if fileDates[i] is not None and i < fileCounter:
 							earliestDate = i
 						if fileDates[i] is not None and latestDate is None and i > fileCounter:
