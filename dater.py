@@ -3,10 +3,11 @@ import glob
 import os
 import sys
 import re
+from threading import Timer
 
 if len(sys.argv) < 4:
-	print('Usage: python dater.py <iMovie Library Path> <Output Files Path> <Max Year of Tapes>')
-	print('Example: python dater.py ~/Movies/iMovie\ Library.imovielibrary Upload/ 2016')
+	print('Usage: python dater.py <iMovie Library Path> <Output Files Path> <Max Year of Tapes> [--repeat [hour to repeat daily, default: 3am]]')
+	print('Example: python dater.py ~/Movies/iMovie\ Library.imovielibrary Upload/ 2016 --repeat 5')
 	exit()
 
 def getYear(input):
@@ -26,6 +27,7 @@ def fixDate(input, output, date):
 	os.system('ffmpeg -i '+input.replace('//','/').replace(' ','\ ')+' -c copy -map 0 -metadata creation_time="'+str(date)+'" '+output.replace('//','/').replace(' ','\ ')+'')
 
 def fixLibrary():
+	print('Fixing dates...')
 	for folder in glob.glob(sys.argv[1]+"/*/"):
 		
 		# Confirm labeled dates are acceptable
@@ -77,5 +79,19 @@ def fixLibrary():
 					fixDate(file, outPath, timeGuess)
 					
 			fileCounter += 1
+	
+	# Restart at 3am the next day if --repeat is enabled
+	if len(sys.argv) >= 5 and sys.argv[4] == '--repeat':
+		if len(sys.argv) == 6:
+			repeatHour = int(sys.argv[5])
+		else:
+			repeatHour = 3
+		x = datetime.datetime.today()
+		y = x.replace(day=x.day+1, hour=repeatHour, minute=0, second=0, microsecond=0)
+		delta_t = y-x
+		secs = delta_t.seconds+1
+		t = Timer(secs, fixLibrary)
+		print('Done fixing dates, starting again tomorrow at', str(repeatHour))
+		t.start()
 	
 fixLibrary()
