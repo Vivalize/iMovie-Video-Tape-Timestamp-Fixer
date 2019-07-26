@@ -20,7 +20,10 @@ def getYear(input):
 		return yearInput
 		
 def fixDate(input, output, date):
-	print('Remuxing', input.split('/')[-1], 'with date', date)
+	fileDir = '/'.join(output.split('/')[:-1])
+	if not os.path.exists(fileDir):
+		os.makedirs(fileDir)
+	os.system('ffmpeg -i '+input.replace('//','/').replace(' ','\ ')+' -c copy -map 0 -metadata creation_time="'+str(date)+'" '+output.replace('//','/').replace(' ','\ ')+'')
 
 def fixLibrary():
 	for folder in glob.glob(sys.argv[1]+"/*/"):
