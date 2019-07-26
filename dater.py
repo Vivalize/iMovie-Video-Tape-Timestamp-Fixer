@@ -37,7 +37,7 @@ def fixLibrary():
 		# Fix folder date range if it disagrees with files inside
 		fileDates = []
 		maxDate = datetime.datetime(int(sys.argv[3]), 12, 31, hour=23, minute=59, second=59)
-		for file in sorted(glob.glob(folder+"*.mov"), key=os.path.getmtime):
+		for file in sorted(glob.glob(folder+"/Original Media/*.mov"), key=os.path.getmtime):
 			fDate = datetime.datetime.fromtimestamp(os.stat(file).st_birthtime)
 			if fDate < maxDate:
 				fDate = datetime.datetime.fromtimestamp(os.stat(file).st_birthtime)
@@ -53,7 +53,7 @@ def fixLibrary():
 		
 		# Remux each file with proper date if needed
 		fileCounter = 1;
-		for file in sorted(glob.glob(folder+"*.mov"), key=os.path.getmtime):
+		for file in sorted(glob.glob(folder+"/Original Media/*.mov"), key=os.path.getmtime):
 			outPath = sys.argv[2]+'/'+folder.split('/')[-2]+'/'+file.split('/')[-1]
 			if not os.path.isfile(outPath):
 				
